@@ -1,0 +1,30 @@
+<html lang="en" ng-app="app">
+    <head>
+        <meta charset="utf-8" />
+        <title>OAuth.io</title>
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css"/>
+        <link rel="stylesheet" href="/css/main.css"/>
+        <link href='//fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,700,700italic,600italic,800,800italic' rel='stylesheet' type='text/css'/>
+        <script src="//code.jquery.com/jquery-1.9.1.js"></script>
+        <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.3/angular.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.3/angular-resource.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.3/angular-route.js"></script>
+        <script src="/js/storage.js"></script>
+        <script src="/js/main.js"></script>
+    </head>
+    <body ng-controller="mainController" ng-keyup="keyup($event)">
+        <div id="display">
+            {{history.last()}}<br/>
+            {{history.value}}
+            
+        </div>
+        <ul id="pad">
+            <li ng-repeat="model in buttons">
+                <a class="button" ng-click="model.onclick()">{{model.symbol}}</a>
+            </li>
+        </ul>
+    </body>
+</html>
