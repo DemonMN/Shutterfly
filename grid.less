@@ -1,0 +1,29 @@
+@base_px: 16px;
+ 
+ 
+@default-width: 1200 * @base_px;
+ 
+@default-colspan: 1;
+ 
+@default-total_cols: 4;
+
+.container{
+    width: @default-width;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.row ( @width : @default-width ) {
+    max-width: @width;
+    width: 100%;
+    margin: 0 auto;
+    // clear at the end of container
+    &:before,
+    &:after {
+        content:"";
+        display:table;
+    }
+    &:after {
+        clear:both;
+    }
+}

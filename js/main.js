@@ -14,7 +14,7 @@ function alert2(object) {
 APP.controller('mainController', ['$scope', '$http', 'localStorageService', '$rootScope', '$location', '$routeParams', '$filter',
     function($scope, $http, storage, $rootScope, $location, $routeParams, $filter) {
     	$scope.numbers = [];
-    	$scope.history = {
+    	$scope.calculator = {
     		value 		: 0,
     		result		: [],
     		operations 	: [],
@@ -23,11 +23,11 @@ APP.controller('mainController', ['$scope', '$http', 'localStorageService', '$ro
     		},
     		operate : function (operation){
     			this.result.push(this.value);
-    			this.operations.push(operation);
     			if (this.result.length > 1){
-    				this.value = operation.calculate(this.result.pop(), this.result.pop());
+    				this.value = this.operations.pop().calculate(this.result.pop(), this.result.pop());
     				this.result.push(this.value);
     			}
+    			this.operations.push(operation);
     			this.value = 0;
     		},
     		last	: function(){
@@ -44,7 +44,7 @@ APP.controller('mainController', ['$scope', '$http', 'localStorageService', '$ro
 				symbol 		: i,
 				keycodes 	: [96 + i, 48 + i],
 				onclick 	: function (){
-					$scope.history.click(this.symbol);
+					$scope.calculator.click(this.symbol);
 				}
 			});
     	}
@@ -56,12 +56,42 @@ APP.controller('mainController', ['$scope', '$http', 'localStorageService', '$ro
     			 return a + b;
     		},
     		onclick   	: function (){
-    			$scope.history.operate(this);
+    			$scope.calculator.operate(this);
+    		}
+    	});
+    	$scope.buttons.push({
+    		symbol		: '-',
+    		keycodes 	: [109, 189],
+    		calculate 	: function (a, b){
+    			 return b - a;
+    		},
+    		onclick   	: function (){
+    			$scope.calculator.operate(this);
+    		}
+    	});
+    	$scope.buttons.push({
+    		symbol		: '*',
+    		keycodes 	: [106],
+    		calculate 	: function (a, b){
+    			 return a * b;
+    		},
+    		onclick   	: function (){
+    			$scope.calculator.operate(this);
+    		}
+    	});$scope.buttons.push({
+    		symbol		: '/',
+    		keycodes 	: [111, 191],
+    		calculate 	: function (a, b){
+    			 return b / a;
+    		},
+    		onclick   	: function (){
+    			$scope.calculator.operate(this);
     		}
     	});
     	
     	$scope.keyHandler = {};
     	$scope.keyup = function(event) {
+    		console.log(event.keyCode);
       		if ($scope.keyHandler[event.keyCode]){
       			$scope.keyHandler[event.keyCode].onclick();
       		}

@@ -1,0 +1,67 @@
+@base: #f938ab;
+@base_width: 45px;
+@font-family: 'Open Sans', sans-serif;
+body {
+	font-family: @font-family;
+	font-size: 13px;
+}
+
+.container{
+    width: @base_width * 20;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.box-shadow(@style, @c) when (iscolor(@c)) {
+  -webkit-box-shadow: @style @c;
+  box-shadow:         @style @c;
+}
+.box-shadow(@style, @alpha: 50%) when (isnumber(@alpha)) {
+  .box-shadow(@style, rgba(0, 0, 0, @alpha));
+}
+.box {
+  color: saturate(@base, 5%);
+  border-color: lighten(@base, 30%);
+  div { .box-shadow(0 0 5px, 30%) }
+}
+ul{
+    list-style: none;
+}
+@color: #0085cf;
+@font-size-large: 16px;
+@button-weight: bold;
+@button-base-color: #fff;
+@button-end-color: #ebebeb;
+@button-hover-end-color: #d7d7d7;
+@button-base-border: #b5b5b5;
+@button-width: @base_width;
+@button-height: @base_width;
+.button{
+    font-size: @font-size-large;
+    font-weight: @button-weight;
+    color: @color;
+    border: 1px solid @button-base-border;
+    height: @button-height;
+    width: @button-width;
+    line-height: @button-height + 5;
+    float: left;
+    display: block;
+    text-align: center;
+    margin: 5px;
+    border-radius: 4px;
+    width: @button-width;
+    background-color: @button-base-color;
+	background: -webkit-gradient(linear, left top, left bottom, from(@button-base-color), to(@button-end-color));
+	background: -webkit-linear-gradient(top, @button-base-color, @button-end-color);
+	background: -moz-linear-gradient(top, @button-base-color, @button-end-color);
+	background: -ms-linear-gradient(top, @button-base-color, @button-end-color);
+	background: -o-linear-gradient(top, @button-base-color, @button-end-color);
+    &:hover {
+        cursor: pointer;
+        background: -webkit-gradient(linear, left top, left bottom, from(@button-base-color), to(@button-hover-end-color));
+    	background: -webkit-linear-gradient(top, @button-base-color, @button-hover-end-color);
+    	background: -moz-linear-gradient(top, @button-base-color, @button-hover-end-color);
+    	background: -ms-linear-gradient(top, @button-base-color, @button-hover-end-color);
+    	background: -o-linear-gradient(top, @button-base-color, @button-hover-end-color);
+    }
+}
