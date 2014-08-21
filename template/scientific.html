@@ -1,0 +1,23 @@
+<h3>Scientific calculator</h3>
+<div>
+    <div id="display">
+        {{calculator.result[0]}} {{calculator.operation.symbol}}<br/>
+        {{calculator.value}}
+        
+    </div>
+</div>
+<div  class="col-xs-3">
+    <div ng-repeat="model in numbers">
+        <a class="button number" ng-click="model.onclick()">{{model.symbol}}</a>
+    </div>
+</div>
+<div  class="col-xs-3">
+    <div ng-repeat="model in symbols">
+        <a class="button number" ng-click="model.onclick()">{{model.symbol}}</a>
+    </div>
+</div>
+<div  class="col-xs-4">
+    <div ng-repeat="model in operations">
+        <a class="button number" ng-click="model.onclick()">{{model.symbol}}</a>
+    </div>
+</div>

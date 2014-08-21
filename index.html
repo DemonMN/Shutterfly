@@ -5,8 +5,9 @@
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
         <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css"/>
         <link rel="stylesheet/less" type="text/css" href="styles.less" />
-        <link rel="stylesheet/less" type="text/css" href="styles.less" />
+        <link rel="stylesheet/less" type="text/css" href="grid.less" />
         <link href='//fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,700,700italic,600italic,800,800italic' rel='stylesheet' type='text/css'/>
+        <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900,200italic,300italic,400italic,600italic,700italic,900italic' rel='stylesheet' type='text/css'>
         <script src="//code.jquery.com/jquery-1.9.1.js"></script>
         <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
         <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
@@ -19,17 +20,6 @@
         <script src="/js/main.js"></script>
     </head>
     <body ng-controller="mainController" ng-keyup="keyup($event)">
-        <div class="container">
-            <div id="display">
-                {{calculator.last()}}<br/>
-                {{calculator.value}}
-                
-            </div>
-            <ul id="pad">
-                <li ng-repeat="model in buttons">
-                    <a class="button" ng-click="model.onclick()" ng-class="{'operation' : model.calculate}">{{model.symbol}}</a>
-                </li>
-            </ul>
-        </div>
+        <div ng-view></div>
     </body>
 </html>

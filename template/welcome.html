@@ -1,0 +1,121 @@
+<style type="text/css">
+    #home{
+        overflow: hidden;
+        position: absolute;
+        top: 0px;
+        width: 100%;
+        text-align: center;
+        color: #FFF;
+    }
+    .container{
+        z-index: 3;
+    }
+    
+    .inner-col{
+        position: relative;
+        min-height: 100%;
+        padding-top: 250px;
+        z-index: 40;
+        text-align: center;
+    }
+    .text {
+       
+    }
+    .text .button span{
+        min-width: 130px;
+    }
+    #calculator, .col-2{
+        margin: 25px auto;
+    }
+    #calculator h3{
+        text-transform: uppercase;
+    }
+    #calculator .button{
+        margin: 0 5px 5px 0px;
+    }
+    #calculator .button span{
+        min-width: 50px;
+    }
+    .col{
+        margin: 0 auto;
+    }
+    .warning{
+        color: #FF0000;
+        font-size: 11px;
+        font-weight: bold;
+    }
+</style>
+<div id="home">
+    <div class="container">
+        <div class="inner-col">
+            <h1>Calculator Challenge</h1>
+            <br/><br/>
+            <p>
+                The PURE javascript Application built by Shagai Nyamdorj
+            </p>
+            <br/>
+            <div class="text">
+                <div>
+                    <a href="#/basic" class="button">
+                        <span>Basic version</span>
+                    </a>
+                    <a href="#/scientific" class="button">
+                        <span>Scientific version</span>
+                    </a>
+                </div>
+            </div>
+            <div id="calculator" ng-controller="calculatorController" ng-show="type" >
+                <div class="row">
+                    <h3>{{type}} calculator</h3>
+                </div>
+                <div class="row">
+                    
+                    <div id="display" class="col-2" >
+                        {{calculator.result[0]}} {{calculator.operation.symbol}}<br/>
+                        {{calculator.sign}} {{calculator.value}}<br/>
+                    </div>
+                    <div class="warning">
+                        {{calculator.message}}&nbsp;
+                    </div>
+                    <div class="col-2">
+                        <div class="row">
+                            <div class="col" >
+                                
+                                <div class="row">
+                                    <a class="button" ng-repeat="component in calculator.components['numbers']" ng-click="component.onclick()">
+                                        <span>
+                                            {{component.text}}
+                                        </span>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col" >
+                                <div class="row">
+                                    <a class="button" ng-repeat="component in calculator.components['commands']" ng-click="component.onclick()">
+                                        <span>
+                                            {{component.text}}
+                                        </span>
+                                    </a>
+                                </div>
+                                <div class="row">
+                                    <a class="button" ng-repeat="component in calculator.components['operations']" ng-click="component.onclick()">
+                                        <span>
+                                            {{component.text}}
+                                        </span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+    <div class="bg">
+        
+    </div>
+    
+    
+</div>
