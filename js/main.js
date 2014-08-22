@@ -6,12 +6,36 @@ APP.config(function($routeProvider) {
 	})
 	.when('/:type', {
 		templateUrl : "template/welcome.html",
-	})
+	});
 });
 function alert2(object) {
 	var out = JSON.stringify(object);
 	alert(out);
 }
+APP.filter('decimal', function () {
+		return function (text, length) {
+			if (!text){
+				return '';
+			}
+			if (isNaN(text)){
+				text = text + '';
+			}
+	    	var arr = text.split(".");
+	        return arr[0].replace(/\d(?=(\d{3})+($))/g, "$&'") + (arr.length > 1 ? '.' + arr[1] : '');
+		};
+	});
+APP.directive('animateOnChange', function($animate) {
+	return function(scope, elem, attr) {
+		scope.$watch(attr.animateOnChange, function(value, old) {
+			if (value != old) {
+				var c = value > old ? 'change-up' : 'change';
+				scope[attr.animateOnChange] = '';
+				scope.$apply();
+				$animate.addClass(elem, c);
+			}
+		});
+	};
+});
 function buildButton(text, shortcuts, keyboard, onclick){
 	var button = {
 		text 		: text,
@@ -45,6 +69,9 @@ APP.factory('numFactory', function() {
 			number = String.fromCharCode("A".charCodeAt(0) + (number - 9));
 		}
 		return buildButton(number, [96 + number, 48 + number], keyboard, function (){
+				if (calculator.value.length == 72){
+					return;
+				}
 				if (calculator.value === '0'){
 					calculator.value = number + '';
 					return;
@@ -152,13 +179,13 @@ APP.factory('basicFactory', ['numpadFactory', function(numpadFactory) {
 				}),
 				buildButton('=', [13], keyboard, function (){
 					if (calculator.operation){
-						calculator.pushOperation();
+						calculator.pushOperation(calculator.operation);
 					}
 				}),
 			];
 			if (type === 'scientific'){
 				calculator.components["operations"].push(buildButton('sin', [], keyboard, function (){
-					calculator.setValue(Math.sin(calculator.getValue()));
+					calculator.setValue(calculator.operationMath.sin(calculator.getValue()));
 				}));
 				calculator.components["operations"].push(buildButton('cos', [], keyboard, function (){
 					calculator.setValue(Math.cos(calculator.getValue()));
@@ -168,6 +195,19 @@ APP.factory('basicFactory', ['numpadFactory', function(numpadFactory) {
 				}));
 				calculator.components["operations"].push(buildOperationButton('^', [], keyboard, calculator, function (a, b, next){
 					next(null, Math.pow(a, b));
+				}));
+				calculator.components["operations"].push(buildButton('log', [], keyboard, function (){
+					calculator.setValue(Math.log(calculator.getValue()));
+				}));
+				calculator.components["operations"].push(buildButton('n!', [], keyboard, function (){
+					var n = calculator.getValue();
+					if (n % 1 === 0 && n > 0 && n < 1000){
+						var value = 1;
+						for(var i = 2; i < n; i++) 
+							value *= i;
+						calculator.setValue(isFinite(value) ? value : 0);
+					}
+					
 				}));
 				calculator.components["operations"].push(buildButton('sqrt', [], keyboard, function (){
 					if (calculator.getValue() < 0){
@@ -183,129 +223,19 @@ APP.factory('basicFactory', ['numpadFactory', function(numpadFactory) {
 	};
 }]);
 APP.controller('mainController', ['$scope', '$http', 'localStorageService', '$rootScope', '$location', '$routeParams', '$filter', 'basicFactory',
-    function($scope, $http, storage, $rootScope, $location, $routeParams, $filter, basicFactory) {
-    	
-   // 	$scope.numbers = [];
-   // 	$scope.calculator = {
-   // 		value 		: '0',
-   // 		result		: [],
-   // 		operation 	: [],
-   // 		click 	: function (number){
-   // 			this.value = this.value * 10 + number;
-   // 		},
-   // 		operate : function (operation){
-   // 			this.result.push(parseFloat(this.value));
-   // 			if (this.result.length > 1){
-   // 				this.value = this.operation.calculate(this.result.pop(), this.result.pop());
-   // 				this.result.push(this.value);
-   // 			}
-   // 			this.operation = operation;
-   // 			this.value = '0';
-   // 		},
-   // 		last	: function(){
-   // 			if (this.result.length < 1){
-   // 				return 0;
-   // 			}
-   // 			return this.result[1];
-   // 		}
-   // 	};
-    	
-   // 	$scope.groups = [[], [], []];
-   // 	$scope.numbers = [];
-   // 	for(var i = 0; i < 10; i++){
-			// $scope.groups[0].push({
-			// 	symbol 		: i,
-			// 	keycodes 	: [96 + i, 48 + i],
-			// 	calculator	: $scope.calculator,
-			// 	onclick 	: function (){
-			// 		if (this.calculator.value === '0'){
-			// 			this.calculator.value = this.symbol + '';
-			// 			return;
-			// 		}
-			// 		this.calculator.value += this.symbol + '';
-			// 	}
-			// });
-   // 	}
-   // 	$scope.groups[1].push({
-   // 		symbol		: '.',
-   // 		keycodes 	: [190, 110],
-   // 		onclick   	: function (){
-   // 			if ($scope.calculator.value.indexOf(".") == -1){
-   // 				$scope.calculator.value += '.';
-   // 			}
-   // 		}
-   // 	});
-   // 	$scope.groups[1].push({
-   // 		symbol		: 'C',
-   // 		keycodes 	: [8, 46],
-   // 		onclick   	: function (){
-   // 			$scope.calculator.value = '0';
-   // 		}
-   // 	});
-    	
-   // 	$scope.groups[2].push({
-   // 		symbol		: '+',
-   // 		keycodes 	: [107, 187],
-   // 		calculate 	: function (a, b){
-   // 			 return a + b;
-   // 		},
-   // 		onclick   	: function (){
-   // 			$scope.calculator.operate(this);
-   // 		}
-   // 	});
-   // 	$scope.groups[2].push({
-   // 		symbol		: '-',
-   // 		keycodes 	: [109, 189],
-   // 		calculate 	: function (a, b){
-   // 			 return b - a;
-   // 		},
-   // 		onclick   	: function (){
-   // 			$scope.calculator.operate(this);
-   // 		}
-   // 	});
-   // 	$scope.groups[2].push({
-   // 		symbol		: '*',
-   // 		keycodes 	: [106],
-   // 		calculate 	: function (a, b){
-   // 			 return a * b;
-   // 		},
-   // 		onclick   	: function (){
-   // 			$scope.calculator.operate(this);
-   // 		}
-   // 	});
-   // 	$scope.groups[2].push({
-   // 		symbol		: '/',
-   // 		keycodes 	: [111, 191],
-   // 		calculate 	: function (a, b){
-   // 			 return b / a;
-   // 		},
-   // 		onclick   	: function (){
-   // 			$scope.calculator.operate(this);
-   // 		}
-   // 	});
-   // 	$scope.groups[2].push({
-   // 		symbol		: '=',
-   // 		keycodes 	: [13],
-   // 		calculate 	: function (a, b){
-   // 			 return a;
-   // 		},
-   // 		onclick   	: function (){
-   // 			$scope.calculator.operate(this);
-   // 		}
-   // 	});
-  	$rootScope.keyupObservers = [];
-  	$scope.keyup = function(event) {
-		angular.forEach($rootScope.keyupObservers , function(observer, index) {
-			if (observer){
-				observer(event);
-			}
-		});
-  	};
-}]);
+	function($scope, $http, storage, $rootScope, $location, $routeParams, $filter, basicFactory) {
+	  	$rootScope.keyupObservers = [];
+	  	$scope.keyup = function(event) {
+			angular.forEach($rootScope.keyupObservers , function(observer, index) {
+				if (observer){
+					observer(event);
+				}
+			});
+	  	};
+	}]);
 
 APP.controller('calculatorController', ['$scope', '$routeParams', 'basicFactory', '$rootScope',
 	function($scope, $routeParams, basicFactory, $rootScope) {
-		console.log($routeParams);
     	$scope.type = $routeParams.type;
     	$scope.keyboard = {};
     	$scope.keyup = function(event) {

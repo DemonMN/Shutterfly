@@ -44,6 +44,15 @@
         font-size: 11px;
         font-weight: bold;
     }
+    .change {
+    	-webkit-transition: 1s linear all; /* Chrome */
+    	transition: 1s linear all;
+    	opacity: 0;
+    }
+     
+    .change-up {
+    	opacity: 1;
+    }
 </style>
 <div id="home">
     <div class="container">
@@ -71,16 +80,22 @@
                 <div class="row">
                     
                     <div id="display" class="col-2" >
-                        {{calculator.result[0]}} {{calculator.operation.symbol}}<br/>
-                        {{calculator.sign}} {{calculator.value}}<br/>
+                        {{calculator.result[0] + '' | decimal}} {{calculator.operation.symbol}}<br/>
+                        {{calculator.sign}} {{calculator.value | decimal}}<br/>
                     </div>
-                    <div class="warning">
+                    <div class="warning"  animate-on-change="calculator.message">
                         {{calculator.message}}&nbsp;
                     </div>
                     <div class="col-2">
                         <div class="row">
                             <div class="col" >
-                                
+                                <div class="row">
+                                    <a class="button" ng-repeat="component in calculator.components['bases']" ng-click="component.onclick()">
+                                        <span>
+                                            {{component.text}}
+                                        </span>
+                                    </a>
+                                </div>
                                 <div class="row">
                                     <a class="button" ng-repeat="component in calculator.components['numbers']" ng-click="component.onclick()">
                                         <span>
