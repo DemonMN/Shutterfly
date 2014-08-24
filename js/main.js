@@ -185,7 +185,7 @@ APP.factory('basicFactory', ['numpadFactory', function(numpadFactory) {
 			];
 			if (type === 'scientific'){
 				calculator.components["operations"].push(buildButton('sin', [], keyboard, function (){
-					calculator.setValue(calculator.operationMath.sin(calculator.getValue()));
+					calculator.setValue(Math.sin(calculator.getValue()));
 				}));
 				calculator.components["operations"].push(buildButton('cos', [], keyboard, function (){
 					calculator.setValue(Math.cos(calculator.getValue()));

@@ -2,66 +2,40 @@
 @base_width: 12px;
 @base_margin: 4px;
 @font-family: 'Open Sans', Helvetica Neue, Arial;
-@color: #0085cf;
-@font-size-large: @base_width;
-@button-weight: 600;
-@button-base-color: #fff;
-@button-end-color: #ccc;
-@button-hover-end-color: #d7d7d7;
-@button-base-border: #b5b5b5;
-@button-width: @base_width * 4;
-@button-height: @base_width * 4;
-body {
-	font-family: @font-family;
-	font-size: 13px;
-    -webkit-font-smoothing: antialiased;
-    background: @base;
-    color: #FFF;
-    line-height: 22px;
-}
-.container{
-    
-}
+@color: @base;
 
-@col-width: @base_width + @base_margin * 2;
-.col-1{
-    &:extend(.grid);
-    width: @col-width;
-}
+@border: 1px solid rgba(255, 255, 255, 0.5);
 
-.col-3{
-     &:extend(.grid);
-    width: @col-width * 3 + @base_margin * 2;
-}
-.col-9{
-     &:extend(.grid);
-    width: @col-width * 9 + @base_margin * 2;
-}
-.grid{
-    display: block;
-}
+.generate-header(6);
 
-
-.box{
-   font-size: @font-size-large;
-   font-weight: @button-weight;
+.generate-header(@n, @i: 1) when (@i =< @n) {
+  h@{i} {
+       font-weight: normal;
+  }
+  .generate-header(@n, (@i + 1));
 }
-#display{
-    margin: 0 auto;
-    &:extend(.box);
-    text-align: right;
-    padding: @base_margin @base_margin * 2;
-    border: 1px solid ;
-    border-color: rgba(255,255,255,0.5);
-    border-radius: 4px;
-    background: rgba(0, 0, 0, 0.05);
-    -webkit-box-shadow: 0 5px 10px rgba(0,0,0,.2);
-    box-shadow: 0 5px 10px rgba(0,0,0,.2);
-    -webkit-transition: all 0.2s linear;
-    -moz-transition: all 0.2s linear;
-    -ms-transition: all 0.2s linear;
-    -o-transition: all 0.2s linear;
-    transition: all 0.2s linear;
+.background-image-linear(@ogrin, @from, @to){
+    background-image: -webkit-linear-gradient(@ogrin, @from, @to);
+    background-image: linear-gradient(@ogrin, @from, @to);
+    background-image: -moz-linear-gradient(@ogrin, @from, @to);
+}
+.border-radius(@radius: 5px) {
+  -webkit-border-radius: @radius;
+     -moz-border-radius: @radius;
+          border-radius: @radius;
+}
+.border-image(@outset, @repeat, @slice, @width, @src, @color) {
+    border-image-outset: @outset;
+    border-image-repeat: @repeat;
+    border-image-slice: @slice;
+    border-image-source: @src;
+    border-image-width: @width;
+    border-color: @color;
+}
+.shadow-generate(@size, @color){
+    -webkit-box-shadow: @size @color;
+    -moz-box-shadow:    @size @color;
+    box-shadow:         @size @color;
 }
 @button-width: 45px;
 .button{
@@ -69,36 +43,14 @@ body {
     -webkit-background-clip: border-box;
     -webkit-background-origin: padding-box;
     -webkit-background-size: auto;
-    -webkit-box-shadow: rgba(0, 0, 0, 0.14902) 0px 1px 0px 0px;
+    .shadow-generate(0px 1px 0px 0px, rgba(0, 0, 0, 0.14902));
     -webkit-font-smoothing: antialiased;
     background-attachment: scroll;
     background-clip: border-box;
     background-color: rgba(0, 0, 0, 0);
-    background-image: -webkit-linear-gradient(top, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.34902));
-    background-origin: padding-box;
-    background-size: auto;
-    border-bottom-color: rgb(255, 255, 255);
-    border-bottom-left-radius: 6px;
-    border-bottom-right-radius: 6px;
-    border-bottom-style: none;
-    border-bottom-width: 0px;
-    border-image-outset: 0px;
-    border-image-repeat: stretch;
-    border-image-slice: 100%;
-    border-image-source: none;
-    border-image-width: 1;
-    border-left-color: rgb(255, 255, 255);
-    border-left-style: none;
-    border-left-width: 0px;
-    border-right-color: rgb(255, 255, 255);
-    border-right-style: none;
-    border-right-width: 0px;
-    border-top-color: rgb(255, 255, 255);
-    border-top-left-radius: 6px;
-    border-top-right-radius: 6px;
-    border-top-style: none;
-    border-top-width: 0px;
-    box-shadow: rgba(0, 0, 0, 0.14902) 0px 1px 0px 0px;
+    .background-image-linear(top, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.34902));
+    .border-image(0px, stretch, 100%, 1, none, @color);
+    .border-radius(5px);
     box-sizing: border-box;
     color: rgb(255, 255, 255);
     cursor: auto;
@@ -115,34 +67,19 @@ body {
     text-decoration: none solid rgb(255, 255, 255);
     text-shadow: rgba(0, 0, 0, 0.0980392) 0px -1px 0px;
     &:hover{
-        box-shadow: inset 0 1px 1px rgba(0,0,0.1,0.6);
+        .shadow-generate(0 5px 10px, rgba(0, 0, 0, .2));
     }
-    
-	
 }
 .button span{
-   cursor: pointer;
-   -webkit-background-clip: border-box;
-    -webkit-background-origin: padding-box;
-    -webkit-background-size: auto;
-    -webkit-font-smoothing: antialiased;
-    background-attachment: scroll;
+    .border-radius(5px);
+    cursor: pointer;
     background-clip: border-box;
     background-color: rgba(0, 0, 0, 0);
     background-image: linear-gradient(rgb(93, 182, 232), rgb(22, 142, 218) 85%, rgb(22, 142, 218) 90%, rgb(29, 147, 221));
     background-origin: padding-box;
-    background-size: auto;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
     box-sizing: border-box;
-    color: rgb(255, 255, 255);
     display: inline-block;
-    font-family: 'Whitney SSm A', 'Whitney SSm B', Helvetica, Arial;
-    font-size: 12px;
-    font-style: normal;
-    font-weight: normal;
+    font-size: 11px;
     height: 37px;
     line-height: 37px;
     padding-bottom: 0px;
@@ -156,6 +93,57 @@ body {
     padding: 5px 0px;
 }
 @col-width: 251px;
+
+@phone-screen: 320px;/* smartphones, portrait iPhone, portrait 480x320 phones (Android) */
+@phone-screen: 480px;/* smartphones, Android phones, landscape iPhone */ 
+@tablet-screen: 600px;/* portrait tablets, portrait iPad, e-readers (Nook/Kindle), landscape 800x480 phones (Android) */ 
+@tablet-screen: 801px;/* tablet, landscape iPad, lo-res laptops ands desktops */ 
+@large-screen: 1025px;/* big landscape tablets, laptops, and desktops */ 
+@large-screen: 1281px;/* hi-res laptops and desktops */ 
+
+@large-screen: 700px;
+.container-size(@large-screen);
+
+.container-size(@size){
+    @base-width: @size;
+    .container{
+        margin: 0 auto;
+        width: @size;
+    }
+}
+@media screen and (min-width: @phone-screen) {
+    .container-size(@phone-screen);
+}
+@media screen and (min-width: @tablet-screen) {
+    .container-size(@tablet-screen);
+}
+@media screen and (min-width: @large-screen) {
+    .container-size(@large-screen);
+}
+
+
+
+body {
+	font-family: @font-family;
+	font-size: 13px;
+    background: @base;
+    color: @color;
+    line-height: 22px;
+}
+
+#display{
+    margin: 0 auto;
+    &:extend(.box);
+    text-align: right;
+    padding: @base_margin @base_margin * 2;
+    border: 1px solid ;
+    border-color: rgba(255,255,255,0.5);
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.05);
+    -webkit-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+    box-shadow: 0 5px 10px rgba(0,0,0,.2);
+}
+
 .col{
     display: table-cell;
     text-align: left;
@@ -165,11 +153,10 @@ body {
     width: @col-width * 2;
 }
 body{
-        
     opacity: 1 !important;
     display: block;
     background: #1e8ecf;
-    transform: translate3d(0,0,0);
+    transform: translate3d(0, 0, 0);
     background-image: -webkit--webkit-radial-gradient(closest-corner,rgba(16,47,70,0) 60%,rgba(16,47,70,0.26)),-webkit--webkit-linear-gradient(342deg,#26d0ce,#1a2980 90%);
     background-image: -webkit--moz-radial-gradient(closest-corner,rgba(16,47,70,0) 60%,rgba(16,47,70,0.26)),-webkit--moz-linear-gradient(342deg,#26d0ce,#1a2980 90%);
     background-image: -webkit--o-radial-gradient(closest-corner,rgba(16,47,70,0) 60%,rgba(16,47,70,0.26)),-webkit--o-linear-gradient(342deg,#26d0ce,#1a2980 90%);
@@ -187,11 +174,52 @@ body{
     background-image: -ms-radial-gradient(closest-corner,rgba(16,47,70,0) 60%,rgba(16,47,70,0.26)),-ms-linear-gradient(108deg,#26d0ce,#1a2980 90%);
 }
 
-.generate-header(4);
-
-.generate-header(@n, @i: 1) when (@i =< @n) {
-  h@{i} {
-       font-weight: normal;
-  }
-  .generate-header(@n, (@i + 1));
+#home{
+    text-align: center;
+    color: @color;
+}
+.inner-col{
+    position: relative;
+    min-height: 100%;
+    padding-top: 50px;
+    z-index: 40;
+    text-align: center;
+}
+.text .button span{
+    min-width: 130px;
+}
+#calculator{
+    
+    
+}
+#calculator, .col-2{
+    margin: 25px auto;
+}
+#calculator h3{
+    text-transform: uppercase;
+}
+#calculator .button{
+    margin: 0 5px 5px 0px;
+}
+#calculator .button span{
+    min-width: 50px;
+}
+.col{
+    margin: 0 auto;
+}
+.warning{
+    color: #FF0000;
+    font-size: 11px;
+    font-weight: bold;
+}
+.change {
+	-webkit-transition: 1s linear all; /* Chrome */
+	transition: 1s linear all;
+	opacity: 0;
+}
+.small{
+    font-size: 9px;
+}
+.change-up {
+	opacity: 1;
 }

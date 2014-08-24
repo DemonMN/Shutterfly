@@ -1,6 +1,6 @@
 Shutterfly Challenge
 ========================================
-Try to learn and use LESSJS
+Try to learn and use LESSJS by doing it 
 
 Application is up and running on https://shutterfly-c9-demonmn.c9.io/
 
